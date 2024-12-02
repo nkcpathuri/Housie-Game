@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housie Game Ticket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .ticket-container {
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        .ticket-header {
+            background: #4caf50;
+            color: white;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .ticket-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2px;
+            padding: 10px;
+        }
+        .ticket-row {
+            display: contents;
+        }
+        .ticket-button {
+            border: 1px solid #333;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            background: #eaf5e6;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .ticket-button.marked {
+            background: #4caf50;
+            color: white;
+        }
+        .striked-row .ticket-button {
+            background: #d3d3d3;
+            text-decoration: line-through;
+            pointer-events: none;
+        }
+        .ticket-container.orange-background {
+            background-color: orange;
+        }
+        .message {
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+            display: none;
+            margin-bottom: 20px;
+        }
+        .start-button {
+            font-size: 20px;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            background-color: green;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .start-button:hover {
+            transform: scale(1.1);
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+    <div class="message" id="winMessage">You won the game!</div>
+    <div class="ticket-container" id="ticketContainer">
+        <div class="ticket-header">Housie Game Ticket</div>
+        <div class="ticket-grid" id="ticketGrid">
+            <!-- Rows and buttons will be dynamically generated here -->
+        </div>
+    </div>
+
+    <script>
+        // Function to generate unique random numbers
+        function generateUniqueNumbers(count, min, max) {
+            const numbers = new Set();
+            while (numbers.size < count) {
+                const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+                numbers.add(randomNum);
+            }
+            return Array.from(numbers);
+        }
+
+        // Generate ticket numbers
+        const randomNumbers = generateUniqueNumbers(15, 1, 90);
+
+        // Grid container and ticket container
+        const gridContainer = document.getElementById('ticketGrid');
+        const ticketContainer = document.getElementById('ticketContainer');
+        const winMessage = document.getElementById('winMessage');
+
+        // Create rows and buttons dynamically
+        for (let i = 0; i < 3; i++) {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'ticket-row';
+            rowDiv.dataset.row = i; // Identify the row
+
+            for (let j = 0; j < 5; j++) {
+                const button = document.createElement('button');
+                button.className = 'ticket-button';
+                button.textContent = randomNumbers[i * 5 + j];
+                button.dataset.row = i; // Assign row number
+                button.addEventListener('click', () => markNumber(button, rowDiv));
+                rowDiv.appendChild(button);
+            }
+            gridContainer.appendChild(rowDiv);
+        }
+
+        // Mark numbers and check for row completion
+        function markNumber(button, rowDiv) {
+            button.classList.toggle('marked'); // Toggle marked state
+
+            // Check if all buttons in the row are marked
+            const rowButtons = Array.from(rowDiv.children);
+            const isRowComplete = rowButtons.every(btn => btn.classList.contains('marked'));
+
+            if (isRowComplete) {
+                rowDiv.classList.add('striked-row');
+            } else {
+                rowDiv.classList.remove('striked-row');
+            }
+
+            // Check if all numbers in the ticket are marked
+            checkCompleteTicket();
+        }
+
+        // Check if the entire ticket is complete
+        function checkCompleteTicket() {
+            const allButtons = Array.from(document.querySelectorAll('.ticket-button'));
+            const allMarked = allButtons.every(button => button.classList.contains('marked'));
+
+            if (allMarked) {
+                ticketContainer.classList.add('orange-background');
+                winMessage.style.display = 'block'; // Show "You won the game!" message
+            } else {
+                ticketContainer.classList.remove('orange-background');
+                winMessage.style.display = 'none'; // Hide the message
+            }
+        }
+    </script>
+    <button class="start-button" onclick="window.location.href='index.html'">Back to home page</button>
+
+</body>
+</html>

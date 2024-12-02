@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housie Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="title">Housie Game</div>
+        <div class="main-content">
+            <div class="number-display" id="numberDisplay">Start!</div>
+            <div class="number-board" id="numberBoard">
+                <!-- Number cells will be dynamically generated -->
+            </div>
+        </div>
+        <div class="buttons">
+            <button class="button button-next" onclick="generateUniqueRandomNumber()" id="nextButton">Next</button>
+        </div>
+        <button class="button button-restart" id="restartButton" onclick="showRestartDialog()">Restart Game</button>
+        <button class="start-button" onclick="window.location.href='index.html'">Back to home page</button>
+
+    </div>
+    <a href="https://nkcpathuri.my.canva.site/portfolio" target="_blank" style="text-decoration: none;">
+        <div class="footer">My Portfolio😉 @nkcpathuri</div>
+    </a>
+    
+
+    <!-- Restart Game Dialog -->
+    <div class="dialog-overlay" id="dialogOverlay">
+        <div class="dialog-box">
+            <div>Are you sure you want to restart the game?</div>
+            <div class="dialog-buttons">
+                <button class="dialog-button dialog-button-yes" onclick="restartGame()">Yes Restart</button>
+                <button class="dialog-button dialog-button-no" onclick="closeDialog()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
