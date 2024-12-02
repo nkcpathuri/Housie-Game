@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+  </head>
+  <body>
+    <script>
+      let nodes = [];
+      let numNodes = 50;
+
+      function setup() {
+        createCanvas(windowWidth, windowHeight);
+
+        // Initialize nodes with random positions
+        for (let i = 0; i < numNodes; i++) {
+          nodes.push({
+            x: random(width),
+            y: random(height),
+            vx: random(-1, 1),
+            vy: random(-1, 1),
+          });
+        }
+      }
+
+      function draw() {
+        background(240);
+
+        // Update and draw nodes
+        for (let node of nodes) {
+          node.x += node.vx;
+          node.y += node.vy;
+
+          // Bounce off edges
+          if (node.x < 0 || node.x > width) node.vx *= -1;
+          if (node.y < 0 || node.y > height) node.vy *= -1;
+
+          fill(50, 100, 200);
+          noStroke();
+          ellipse(node.x, node.y, 8, 8);
+        }
+
+        // Draw links between close nodes
+        stroke(100, 150, 255, 100); // Semi-transparent blue
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            let d = dist(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
+            if (d < 150) {
+              line(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
+            }
+          }
+        }
+      }
+
+      function windowResized() {
+        resizeCanvas(windowWidth, windowHeight);
+      }
+    </script>
+  </body>
+</html>
